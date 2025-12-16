@@ -185,25 +185,25 @@ const Home = () => {
       image: heroSlide1,
       title: "Modern Architectural Excellence",
       category: "Commercial",
-      location: "Seattle, WA"
+      location: ""
     },
     {
       image: heroSlide2,
       title: "Contemporary Residential Design",
       category: "Residential",
-      location: "Los Angeles, CA"
+      location: ""
     },
     {
       image: heroSlide3,
       title: "Elegant Corporate Spaces",
       category: "Commercial",
-      location: "San Francisco, CA"
+      location: ""
     },
     {
       image: heroSlide4,
       title: "Timeless Institutional Architecture",
       category: "Institutional",
-      location: "Washington, DC"
+      location: ""
     }
   ];
 
