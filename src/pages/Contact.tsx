@@ -193,7 +193,7 @@ const Contact = () => {
       <section className="py-0">
         <div className="w-full h-[400px] md:h-[500px]">
     <iframe 
-  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.284758994511!2d79.1303867750346!3d21.141062080536787!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd4c7333d455447%3A0xc47b973347c4091a!2sNishant%20Pethe%20And%20Associates!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
+  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.1908489480907!2d79.12962230000001!3d21.1448019!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd4cba1fc6d083b%3A0xf4db26b4d9bb783d!2sNishant%20Pethe%20%26%20Associates!5e0!3m2!1sen!2snl!4v1766228941427!5m2!1sen!2snl"
   width="100%" 
   height="100%" 
   style={{ border: 0 }} 
