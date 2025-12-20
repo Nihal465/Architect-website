@@ -25,11 +25,15 @@ const Contact = () => {
 
     const form = e.currentTarget;
     const formData = new FormData(form);
+    
+    // Add the form name manually to the data being sent
+    formData.append("form-name", "contact");
 
     try {
       await fetch("/", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(formData as any).toString(),
       });
 
       toast({
@@ -52,7 +56,7 @@ const Contact = () => {
 
   return (
     <>
-      {/* Hero Section - Full Viewport with Communication Visualization */}
+      {/* Hero Section */}
       <section className="relative h-screen min-h-[600px] max-h-[900px] overflow-hidden">
         <div className="relative w-full h-full">
           <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -93,9 +97,19 @@ const Contact = () => {
           <div className="grid lg:grid-cols-2 gap-16">
             <div className="animate-fade-up">
               <h2 className="text-3xl md:text-4xl font-serif mb-8 text-foreground">Start Your Project</h2>
-              <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" onSubmit={handleSubmit} className="space-y-6">
+              
+              {/* NETLIFY FORM SETTINGS */}
+              <form 
+                name="contact" 
+                method="POST" 
+                data-netlify="true" 
+                netlify-honeypot="bot-field" 
+                onSubmit={handleSubmit} 
+                className="space-y-6"
+              >
+                {/* REQUIRED HIDDEN INPUTS FOR NETLIFY */}
                 <input type="hidden" name="form-name" value="contact" />
-                <input type="hidden" name="bot-field" />
+                <div hidden><label>Don't fill this out: <input name="bot-field" /></label></div>
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
@@ -116,7 +130,9 @@ const Contact = () => {
                   <div className="space-y-2">
                     <Label htmlFor="project-type">Project Type *</Label>
                     <Select onValueChange={(value) => setProjectType(value)} required>
-                      <SelectTrigger id="project-type" className="h-12"><SelectValue placeholder="Select a type" /></SelectTrigger>
+                      <SelectTrigger id="project-type" className="h-12">
+                        <SelectValue placeholder="Select a type" />
+                      </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="residential">Residential</SelectItem>
                         <SelectItem value="commercial">Commercial</SelectItem>
@@ -125,6 +141,7 @@ const Contact = () => {
                         <SelectItem value="consultation">Consultation</SelectItem>
                       </SelectContent>
                     </Select>
+                    {/* Hidden input to ensure Select value is picked up by Netlify */}
                     <input type="hidden" name="project-type" value={projectType} />
                   </div>
                 </div>
@@ -133,6 +150,7 @@ const Contact = () => {
                   <Label htmlFor="message">Message *</Label>
                   <Textarea id="message" name="message" placeholder="Tell us about your project..." required className="min-h-[150px] resize-none" />
                 </div>
+                
                 <Button type="submit" size="lg" disabled={isSubmitting} className="w-full md:w-auto bg-accent hover:bg-accent/90 text-foreground font-medium px-12">
                   {isSubmitting ? "Sending..." : "Send Message"}
                 </Button>
@@ -145,7 +163,9 @@ const Contact = () => {
               <div className="space-y-6">
                 <Card className="hover-lift">
                   <CardContent className="p-6 flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center"><MapPin className="h-6 w-6 text-accent" /></div>
+                    <div className="flex-shrink-0 w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
+                      <MapPin className="h-6 w-6 text-accent" />
+                    </div>
                     <div>
                       <h3 className="font-medium mb-1 text-foreground">Office Location</h3>
                       <p className="text-muted-foreground">Honey Indra Apartment Block no.204, 2nd floor<br />Shastri Nagar Square, Nagpur, 440008</p>
@@ -154,7 +174,9 @@ const Contact = () => {
                 </Card>
                 <Card className="hover-lift">
                   <CardContent className="p-6 flex items-start gap-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center"><Mail className="h-6 w-6 text-accent" /></div>
+                    <div className="flex-shrink-0 w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
+                      <Mail className="h-6 w-6 text-accent" />
+                    </div>
                     <div>
                       <h3 className="font-medium mb-1 text-foreground">Email</h3>
                       <a href="mailto:info@architect.com" className="text-muted-foreground hover:text-accent transition-colors">info@architect.com</a>
@@ -170,7 +192,15 @@ const Contact = () => {
       {/* Google Maps Section */}
       <section className="py-0">
         <div className="w-full h-[400px] md:h-[500px]">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.4646702747355!2d79.0683!3d21.1332!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd4c06200000001%3A0x6291c3d6999201!2sNagpur%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" width="100%" height="100%" style={{ border: 0 }} allowFullScreen={true} loading="lazy" title="Office Location" />
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.246471840001!2d79.0881512!3d21.1425888!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd4c09424268953%3A0xc6c42171171804f3!2sShastri%20Nagar%20Square%2C%20Nagpur%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" 
+            width="100%" 
+            height="100%" 
+            style={{ border: 0 }} 
+            allowFullScreen={true} 
+            loading="lazy" 
+            title="Office Location" 
+          />
         </div>
       </section>
     </>
