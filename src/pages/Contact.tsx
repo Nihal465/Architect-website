@@ -179,7 +179,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-medium mb-1 text-foreground">Email</h3>
-                      <a href="mailto:info@architect.com" className="text-muted-foreground hover:text-accent transition-colors">nishantpethe.com</a>
+                      <a href="mailto:info@architect.com" className="text-muted-foreground hover:text-accent transition-colors">nishantpethe@gmail.com</a>
                     </div>
                   </CardContent>
                 </Card>
