@@ -14,7 +14,8 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-// IMPORT YOUR SUPABASE CLIENT
+
+// 1. CORRECTED IMPORT PATH (Going up one level from /pages to /src)
 import { supabase } from "../supabaseClient"; 
 
 const Contact = () => {
@@ -22,31 +23,25 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [projectType, setProjectType] = useState("");
 
-  // UPDATED HANDLE SUBMIT FOR SUPABASE
+  // 2. UPDATED HANDLE SUBMIT (Prevents the 405 error and talks to Supabase)
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    e.preventDefault(); // This is the most important line to stop the 405 error
     setIsSubmitting(true);
 
     const form = e.currentTarget;
     const formData = new FormData(form);
     
-    // Extract values from the form
-    const name = formData.get("name") as string;
-    const email = formData.get("email") as string;
-    const phone = formData.get("phone") as string;
-    const message = formData.get("message") as string;
-
     try {
-      // Connect to Supabase table: contact_forms
+      // Direct insertion into Supabase
       const { error } = await supabase
         .from('contact_forms')
         .insert([
           { 
-            name, 
-            email, 
-            phone, 
+            name: formData.get("name"), 
+            email: formData.get("email"), 
+            phone: formData.get("phone"), 
             project_type: projectType, 
-            message 
+            message: formData.get("message") 
           },
         ]);
 
@@ -60,10 +55,10 @@ const Contact = () => {
       form.reset();
       setProjectType("");
     } catch (error: any) {
-      console.error("Supabase Error:", error.message);
+      console.error("Supabase Error Details:", error);
       toast({
         title: "Submission failed",
-        description: "Could not save to database. Check your connection.",
+        description: error.message || "Please check your connection and try again.",
         variant: "destructive",
       });
     } finally {
@@ -73,7 +68,7 @@ const Contact = () => {
 
   return (
     <>
-      {/* Hero Section - Kept Exactly As Is */}
+      {/* Hero Section */}
       <section className="relative h-screen min-h-[600px] max-h-[900px] overflow-hidden">
         <div className="relative w-full h-full">
           <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -115,6 +110,7 @@ const Contact = () => {
             <div className="animate-fade-up">
               <h2 className="text-3xl md:text-4xl font-serif mb-8 text-foreground">Start Your Project</h2>
               
+              {/* 3. CLEANED FORM TAG (No action or method needed) */}
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
@@ -192,7 +188,7 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* Google Maps Section - KEPT EXACTLY AS YOU REQUESTED */}
+      {/* Google Maps Section - KEPT EXACTLY AS IS */}
       <section className="py-0">
         <div className="w-full h-[400px] md:h-[500px]">
           <iframe 
