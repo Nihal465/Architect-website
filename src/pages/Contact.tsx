@@ -14,12 +14,15 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+// IMPORT YOUR SUPABASE CLIENT
+import { supabase } from "../supabaseClient"; 
 
 const Contact = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [projectType, setProjectType] = useState("");
 
+  // UPDATED HANDLE SUBMIT FOR SUPABASE
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -27,15 +30,27 @@ const Contact = () => {
     const form = e.currentTarget;
     const formData = new FormData(form);
     
-    // Add the form name manually to the data being sent
-    formData.append("form-name", "contact");
+    // Extract values from the form
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const phone = formData.get("phone") as string;
+    const message = formData.get("message") as string;
 
     try {
-      await fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(formData as any).toString(),
-      });
+      // Connect to Supabase table: contact_forms
+      const { error } = await supabase
+        .from('contact_forms')
+        .insert([
+          { 
+            name, 
+            email, 
+            phone, 
+            project_type: projectType, 
+            message 
+          },
+        ]);
+
+      if (error) throw error;
 
       toast({
         title: "Message sent successfully!",
@@ -44,10 +59,11 @@ const Contact = () => {
 
       form.reset();
       setProjectType("");
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Supabase Error:", error.message);
       toast({
         title: "Submission failed",
-        description: "Please try again later.",
+        description: "Could not save to database. Check your connection.",
         variant: "destructive",
       });
     } finally {
@@ -57,7 +73,7 @@ const Contact = () => {
 
   return (
     <>
-      {/* Hero Section */}
+      {/* Hero Section - Kept Exactly As Is */}
       <section className="relative h-screen min-h-[600px] max-h-[900px] overflow-hidden">
         <div className="relative w-full h-full">
           <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -99,19 +115,7 @@ const Contact = () => {
             <div className="animate-fade-up">
               <h2 className="text-3xl md:text-4xl font-serif mb-8 text-foreground">Start Your Project</h2>
               
-              {/* NETLIFY FORM SETTINGS */}
-              <form 
-                name="contact" 
-                method="POST" 
-                data-netlify="true" 
-                netlify-honeypot="bot-field" 
-                onSubmit={handleSubmit} 
-                className="space-y-6"
-              >
-                {/* REQUIRED HIDDEN INPUTS FOR NETLIFY */}
-                <input type="hidden" name="form-name" value="contact" />
-                <div hidden><label>Don't fill this out: <input name="bot-field" /></label></div>
-
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="name">Name *</Label>
@@ -142,8 +146,6 @@ const Contact = () => {
                         <SelectItem value="consultation">Consultation</SelectItem>
                       </SelectContent>
                     </Select>
-                    {/* Hidden input to ensure Select value is picked up by Netlify */}
-                    <input type="hidden" name="project-type" value={projectType} />
                   </div>
                 </div>
 
@@ -180,7 +182,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-medium mb-1 text-foreground">Email</h3>
-                      <a href="mailto:info@architect.com" className="text-muted-foreground hover:text-accent transition-colors">nishantpethe@gmail.com</a>
+                      <a href="mailto:nishantpethe@gmail.com" className="text-muted-foreground hover:text-accent transition-colors">nishantpethe@gmail.com</a>
                     </div>
                   </CardContent>
                 </Card>
@@ -190,19 +192,19 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* Google Maps Section */}
+      {/* Google Maps Section - KEPT EXACTLY AS YOU REQUESTED */}
       <section className="py-0">
         <div className="w-full h-[400px] md:h-[500px]">
-    <iframe 
-  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.1908489480907!2d79.12962230000001!3d21.1448019!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd4cba1fc6d083b%3A0xf4db26b4d9bb783d!2sNishant%20Pethe%20%26%20Associates!5e0!3m2!1sen!2snl!4v1766228941427!5m2!1sen!2snl"
-  width="100%" 
-  height="100%" 
-  style={{ border: 0 }} 
-  allowFullScreen={true} 
-  loading="lazy" 
-  referrerPolicy="no-referrer-when-downgrade"
-  title="Office Location"
-/>
+          <iframe 
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.1908489480907!2d79.12962230000001!3d21.1448019!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd4cba1fc6d083b%3A0xf4db26b4d9bb783d!2sNishant%20Pethe%20%26%20Associates!5e0!3m2!1sen!2snl!4v1766228941427!5m2!1sen!2snl"
+            width="100%" 
+            height="100%" 
+            style={{ border: 0 }} 
+            allowFullScreen={true} 
+            loading="lazy" 
+            referrerPolicy="no-referrer-when-downgrade"
+            title="Office Location"
+          />
         </div>
       </section>
     </>
