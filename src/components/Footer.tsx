@@ -67,7 +67,7 @@ Nagpur, Maharashtra 440008
               <li className="flex items-start space-x-3">
                 <Mail className="h-5 w-5 mt-0.5 text-gray-400 flex-shrink-0" />
                 <a href="mailto:info@architect.com" className="text-sm text-gray-400 hover:text-accent transition-colors">
-                  nishantpethe.com
+                  nishantpethe@gmail.com
                 </a>
               </li>
               <li className="flex items-start space-x-3">
